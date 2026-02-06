@@ -8,9 +8,49 @@ export default function Home() {
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   
   // "Runaway" button state
   const [noPos, setNoPos] = useState({ top: "auto", left: "auto", position: "static" });
+
+  useEffect(() => {
+    // Attempt autoplay on mount
+    if (audioRef.current) {
+        audioRef.current.volume = 0.5; 
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+             playPromise.catch(error => {
+                 console.log("Autoplay prevented:", error);
+             });
+        }
+    }
+
+    const handleInteraction = () => {
+        if (audioRef.current && audioRef.current.paused) {
+            audioRef.current.play().catch(e => console.log("Play failed", e));
+        }
+        ['click', 'touchstart', 'keydown'].forEach(event => 
+            document.removeEventListener(event, handleInteraction)
+        );
+    };
+
+    ['click', 'touchstart', 'keydown'].forEach(event => 
+        document.addEventListener(event, handleInteraction)
+    );
+
+    return () => {
+        ['click', 'touchstart', 'keydown'].forEach(event => 
+            document.removeEventListener(event, handleInteraction)
+        );
+    };
+  }, []);
+
+  useEffect(() => {
+     if (audioRef.current) {
+         audioRef.current.muted = isMuted;
+     }
+  }, [isMuted]);
 
   useEffect(() => {
     // Check if mobile for specific logic adjustments
@@ -50,10 +90,22 @@ export default function Home() {
   };
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 touch-none">
+    <main className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-20">
       
+      {/* Background Music */}
+      <audio ref={audioRef} src="/music.mp3" loop autoPlay />
+      
+      {/* Mute/Unmute Toggle */}
+      <button 
+        onClick={() => setIsMuted(!isMuted)}
+        className="fixed top-4 right-4 z-50 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white/80 transition-all text-2xl"
+        aria-label="Toggle sound"
+      >
+        {isMuted ? "🔇" : "🎵"}
+      </button>
+
       {/* Soft Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-64 h-64 md:w-96 md:h-96 bg-pink-200/30 rounded-full blur-[80px] md:blur-[100px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 md:w-96 md:h-96 bg-rose-200/30 rounded-full blur-[80px] md:blur-[100px]" />
       </div>
@@ -64,7 +116,7 @@ export default function Home() {
         loop 
         muted 
         playsInline 
-        className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen pointer-events-none z-0" 
+        className="fixed inset-0 w-full h-full object-cover opacity-60 mix-blend-screen pointer-events-none z-0" 
       />
 
       <AnimatePresence mode="wait">

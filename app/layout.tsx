@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${greatVibes.variable} ${poppins.variable} antialiased min-h-screen selection:bg-rose-200 selection:text-rose-900 overflow-hidden`}
+        className={`${greatVibes.variable} ${poppins.variable} antialiased min-h-screen selection:bg-rose-200 selection:text-rose-900 bg-rose-50`}
       >
         {children}
       </body>
