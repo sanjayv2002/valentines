@@ -9,6 +9,7 @@ export default function Home() {
   const [yesPressed, setYesPressed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [showStartMusic, setShowStartMusic] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   // "Runaway" button state
@@ -22,6 +23,7 @@ export default function Home() {
         if (playPromise !== undefined) {
              playPromise.catch(error => {
                  console.log("Autoplay prevented:", error);
+                 setShowStartMusic(true);
              });
         }
     }
@@ -30,6 +32,7 @@ export default function Home() {
         if (audioRef.current && audioRef.current.paused) {
             audioRef.current.play().catch(e => console.log("Play failed", e));
         }
+        setShowStartMusic(false);
         ['click', 'touchstart', 'keydown'].forEach(event => 
             document.removeEventListener(event, handleInteraction)
         );
@@ -103,6 +106,19 @@ export default function Home() {
       >
         {isMuted ? "🔇" : "🎵"}
       </button>
+
+      {/* Music Start Prompt */}
+      {showStartMusic && (
+        <div 
+            className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-xl text-rose-500 font-bold animate-bounce cursor-pointer flex items-center gap-2 border-2 border-rose-200" 
+            onClick={() => {
+                if (audioRef.current) audioRef.current.play();
+                setShowStartMusic(false);
+            }}
+        >
+             <span>🎵</span> Tap anywhere for music!
+        </div>
+      )}
 
       {/* Soft Background Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
