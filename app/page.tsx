@@ -63,7 +63,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative flex flex-col items-center justify-start md:justify-center min-h-screen overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-20 md:py-0 touch-none">
+    <main className="relative flex flex-col items-center justify-start md:justify-center min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-12 md:py-0">
       
       {/* Start Screen Overlay */}
       {!started && (
@@ -159,7 +159,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-lg md:text-2xl text-rose-800/90 font-normal leading-relaxed w-full max-w-[90vw] md:max-w-2xl mx-auto drop-shadow-sm px-4"
+              className="text-xl md:text-2xl text-rose-800/90 font-medium leading-relaxed w-full max-w-[95vw] md:max-w-2xl mx-auto drop-shadow-sm px-4 pb-12"
             >
                Hey there, one of the most important person of my life. We have been through love and hatered, fights and supporting eachother. I love you from the bottom of my heart. Everything we talk about, every update, every call makes us more US. I just am grateful to god everyday that I get a second chance with you to prove that I'm here to stay. I am you ride or die. I love you. I hope this bought a smile of your face. ✨
             </motion.p>

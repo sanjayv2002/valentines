@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   description: "Will you be my Valentine?",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${greatVibes.variable} ${poppins.variable} antialiased min-h-screen selection:bg-rose-200 selection:text-rose-900 bg-rose-50`}
+        className={`${greatVibes.variable} ${poppins.variable} antialiased min-h-screen selection:bg-rose-200 selection:text-rose-900 bg-rose-50 overflow-x-hidden`}
       >
         {children}
       </body>
