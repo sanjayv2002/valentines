@@ -9,47 +9,11 @@ export default function Home() {
   const [yesPressed, setYesPressed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [showStartMusic, setShowStartMusic] = useState(false);
+  const [started, setStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   // "Runaway" button state
   const [noPos, setNoPos] = useState({ top: "auto", left: "auto", position: "static" });
-
-  useEffect(() => {
-    // Attempt autoplay on mount
-    if (audioRef.current) {
-        audioRef.current.volume = 0.5; 
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-             playPromise.catch(error => {
-                 console.log("Autoplay prevented:", error);
-                 setShowStartMusic(true);
-             });
-        }
-    }
-
-    const handleInteraction = () => {
-        if (audioRef.current) {
-            if (audioRef.current.paused) {
-                audioRef.current.play().catch(e => console.log("Play failed", e));
-            }
-        }
-        setShowStartMusic(false);
-        ['click', 'touchstart', 'keydown'].forEach(event => 
-            document.removeEventListener(event, handleInteraction)
-        );
-    };
-
-    ['click', 'touchstart', 'keydown'].forEach(event => 
-        document.addEventListener(event, handleInteraction)
-    );
-
-    return () => {
-        ['click', 'touchstart', 'keydown'].forEach(event => 
-            document.removeEventListener(event, handleInteraction)
-        );
-    };
-  }, []);
 
   useEffect(() => {
      if (audioRef.current) {
@@ -64,6 +28,13 @@ export default function Home() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const handleStart = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+    }
+    setStarted(true);
+  };
 
   const handleNoInteraction = () => {
     setNoCount(noCount + 1);
@@ -94,30 +65,44 @@ export default function Home() {
   return (
     <main className="relative flex flex-col items-center justify-start md:justify-center min-h-screen overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-20 md:py-0 touch-none">
       
+      {/* Start Screen Overlay */}
+      {!started && (
+           <div className="fixed inset-0 z-[100] bg-pink-50 flex flex-col items-center justify-center gap-8 text-center p-4">
+              <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="relative"
+              >
+                  <div className="text-8xl animate-bounce">💌</div>
+              </motion.div>
+              <h1 className="font-[var(--font-great-vibes)] text-5xl md:text-7xl text-rose-500 drop-shadow-sm">
+                  A Special Message
+              </h1>
+              <p className="text-rose-400 text-lg animate-pulse">Tap to open internal feelings...</p>
+              
+              <button 
+                  onClick={handleStart}
+                  className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-xl px-12 py-4 rounded-full shadow-lg hover:shadow-xl transition-all border-4 border-rose-200"
+              >
+                  Open 💝
+              </button>
+           </div>
+      )}
+
       {/* Background Music */}
-      <audio ref={audioRef} src="/music.mp3" loop autoPlay />
+      <audio ref={audioRef} src="/music.mp3" loop />
       
       {/* Mute/Unmute Toggle */}
       <button 
         onClick={() => setIsMuted(!isMuted)}
-        className="fixed top-4 right-4 z-50 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white/80 transition-all text-2xl"
+        className={`fixed top-4 right-4 z-50 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white/80 transition-all text-2xl ${
+            !started ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
         aria-label="Toggle sound"
       >
         {isMuted ? "🔇" : "🎵"}
       </button>
-
-      {/* Music Start Prompt */}
-      {showStartMusic && (
-        <div 
-            className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-xl text-rose-500 font-bold animate-bounce cursor-pointer flex items-center gap-2 border-2 border-rose-200" 
-            onClick={() => {
-                if (audioRef.current) audioRef.current.play();
-                setShowStartMusic(false);
-            }}
-        >
-             <span>🎵</span> Tap anywhere for music!
-        </div>
-      )}
 
       {/* Soft Background Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
