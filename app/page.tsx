@@ -29,8 +29,10 @@ export default function Home() {
     }
 
     const handleInteraction = () => {
-        if (audioRef.current && audioRef.current.paused) {
-            audioRef.current.play().catch(e => console.log("Play failed", e));
+        if (audioRef.current) {
+            if (audioRef.current.paused) {
+                audioRef.current.play().catch(e => console.log("Play failed", e));
+            }
         }
         setShowStartMusic(false);
         ['click', 'touchstart', 'keydown'].forEach(event => 
@@ -66,19 +68,16 @@ export default function Home() {
   const handleNoInteraction = () => {
     setNoCount(noCount + 1);
     
-    // Calculate random position within the viewport
-    if (typeof window !== 'undefined') {
-      // More aggressive padding for mobile to prevent off-screen buttons
-      const padding = isMobile ? 40 : 150; 
-      const x = Math.random() * (window.innerWidth - padding * 2) + padding;
-      const y = Math.random() * (window.innerHeight - padding * 2) + padding;
-      
-      setNoPos({
-        top: `${y}px`,
-        left: `${x}px`,
+    // Calculate random position within the viewport using safe percentages
+    // This prevents the button (which has width/height) from going off-screen
+    const randomX = Math.random() * 60 + 5; // 5% to 65% left usage (leaving ~35% for button width)
+    const randomY = Math.random() * 60 + 10; // 10% to 70% top usage
+    
+    setNoPos({
+        top: `${randomY}%`,
+        left: `${randomX}%`,
         position: "fixed" 
-      } as any);
-    }
+    } as any);
   };
 
   const getNoText = () => {
