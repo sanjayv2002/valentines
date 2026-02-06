@@ -90,7 +90,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-20">
+    <main className="relative flex flex-col items-center justify-start md:justify-center min-h-screen overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-rose-100 font-[var(--font-poppins)] selection:bg-rose-100 py-20 md:py-0 touch-none">
       
       {/* Background Music */}
       <audio ref={audioRef} src="/music.mp3" loop autoPlay />
@@ -159,9 +159,9 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-lg md:text-2xl text-rose-800/80 font-light"
+              className="text-lg md:text-2xl text-rose-800/90 font-normal leading-relaxed w-full max-w-[90vw] md:max-w-2xl mx-auto drop-shadow-sm px-4"
             >
-               I love you so much! ✨
+               Hey there, one of the most important person of my life. We have been through love and hatered, fights and supporting eachother. I love you from the bottom of my heart. Everything we talk about, every update, every call makes us more US. I just am grateful to god everyday that I get a second chance with you to prove that I'm here to stay. I am you ride or die. I love you. I hope this bought a smile of your face. ✨
             </motion.p>
           </motion.div>
         ) : (
@@ -240,7 +240,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      <footer className="absolute bottom-4 text-rose-300/80 text-[10px] md:text-xs font-medium tracking-widest uppercase">
+      <footer className="mt-12 mb-6 text-rose-300/80 text-[10px] md:text-xs font-medium tracking-widest uppercase relative z-10 pointer-events-none">
          Made with ❤️
       </footer>
     </main>
