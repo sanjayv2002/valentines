@@ -99,7 +99,7 @@ export default function Home() {
               transition={{ delay: 0.6 }}
               className="text-xl md:text-2xl text-rose-800/80 font-light"
             >
-               I love you so much! ✨
+               Hey there, one of the most important person of my life. We have been through love and hatered, fights and supporting eachother. I love you from the bottom of my heart. Everything we talk about, every update, every call makes us more US. I just am grateful to god everyday that I get a second chance with you to prove that I'm here to stay. I am you ride or die. I love you. I hope this bought a smile of your face. ✨
             </motion.p>
           </motion.div>
         ) : (
